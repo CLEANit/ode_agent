@@ -7,11 +7,12 @@ from stable_baselines.common.vec_env import VecFrameStack
 from stable_baselines import PPO2
 import os.path
 import time
-
+import os
 start = time.time()
 
+env_name = os.environ['ENV']
 
-env = gym.make('ODEWorld_0-v0')
+env = gym.make(env_name)
 
 # env = FrameStack(env, n_frames=3)
 env = DummyVecEnv([lambda: env])
@@ -21,8 +22,8 @@ env = VecFrameStack(env, n_stack=3)
 
 # policy_kwargs =  dict(net_arch=[256, 256])
 
-if os.path.isfile('submarine_ppo.pkl'):
-	model = PPO2.load('submarine_ppo', env=env, verbose=1, tensorboard_log="./ppo_tensorboard/")
+if os.path.isfile("{}.pkl".format(env_name)):
+	model = PPO2.load(env_name, env=env, verbose=1, tensorboard_log="./ppo_tensorboard/")
 else:
 	model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log="./ppo_tensorboard/")
 	# model = PPO2(CnnPolicy, env, verbose=1, tensorboard_log="./ppo_tensorboard/")
@@ -31,8 +32,8 @@ print("Training model.")
 
 # Save model periodically
 # for i in range(1000):
-model.learn(total_timesteps=100000)
-model.save("submarine_ppo")
+model.learn(total_timesteps=10000)
+model.save(env_name)
 
 env.close()
 
