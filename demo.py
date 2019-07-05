@@ -2,13 +2,16 @@ import gym
 import odeworldgym
 import numpy as np
 from time import sleep
+import os
 
 # Demo for using ODEWorld-v0, Reaction 0
 
 perfect = False # Use a perfect policy
 
 # Initialize the environment
-env = gym.make('ODEWorld_6_overlap-v0')
+env_name = os.environ['ENV']
+
+env = gym.make(env_name)
 render_mode = 'human'
 
 # Reset the environment to get initial state
